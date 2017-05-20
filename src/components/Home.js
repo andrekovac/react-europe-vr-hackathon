@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   asset,
   Pano,
@@ -8,17 +8,19 @@ import {
 
 import ScheduleData from './ScheduleData';
 
-export default class Home extends React.Component {
+export default class Home extends Component {
   state = {
     textColor: 'blue',
     tintColor: 'purple',
   };
 
   render() {
+    const { data } = this.props;
+
     return (
       <View>
         <Pano
-          source={asset('chess-world.jpg')}
+          source={asset('outdoors.jpg')}
           style={{ tintColor: this.state.tintColor }}
         />
         <Text
@@ -36,7 +38,7 @@ export default class Home extends React.Component {
           }}
           onEnter={() => {
             this.setState({ textColor: 'red', tintColor: 'yellow' });
-            this.props.data.refetch();
+            data && data.refetch();
           }}
           onExit={() => this.setState({ textColor: 'white', tintColor: 'green' })}>
         >

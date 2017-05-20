@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-} from 'react-vr';
+import { Text, View } from 'react-vr';
+import { graphql, gql } from 'react-apollo';
+
 import { ActivityIndicator } from 'react-native';
 
-export default class ScheduleData extends Component {
+class ScheduleData extends Component {
   state = {
     text: 'No data yet',
   };
@@ -21,7 +20,9 @@ export default class ScheduleData extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data: { events } } = this.props;
+
+    console.log({ events });
 
     return (
       <View>
@@ -40,10 +41,38 @@ export default class ScheduleData extends Component {
           }}
         >
           { this.state.text }
-          Login:
-          { data.feed && data.feed[0] && data.feed[0].repository.owner.login }
+          City:
+          { events && events[0] && events[0].venueCity }
         </Text>
       </View>
     );
   }
 };
+
+const SCHEDULE_QUERY = gql`
+  query schedule {
+  events(slug: "reacteurope-2017") {
+    schedule {
+      title
+      type
+      startDate
+      length
+    }
+    venueCity
+    venueAddress
+    venueName
+    venueLatitude
+    venueLongitude
+  }
+}`;
+
+
+export default graphql(SCHEDULE_QUERY, {
+  options: {
+    // fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
+  },
+  // props: ({ data: { events, networkStatus, error } }) => ({
+  //   events, networkStatus, error
+  // }),
+})(ScheduleData);

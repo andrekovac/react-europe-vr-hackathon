@@ -9,6 +9,7 @@ function init(bundle, parent, options) {
   const vr = new VRInstance(bundle, 'ReactEuropeHackathon', parent, {
     // Add custom options here
     enableHotReload: true,
+    disableTouchPanning: true,
     ...options,
   });
   vr.render = function() {
