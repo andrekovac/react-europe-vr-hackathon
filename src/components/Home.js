@@ -7,6 +7,7 @@ import {
 } from 'react-vr';
 
 import ScheduleData from './ScheduleData';
+import Rain from './Rain';
 
 export default class Home extends Component {
   state = {
@@ -14,17 +15,22 @@ export default class Home extends Component {
     tintColor: 'purple',
   };
 
+  componentDidMount() {
+
+  };
+
   render() {
     const { data } = this.props;
 
     return (
       <View>
-        <Pano
-          source={asset('outdoors.jpg')}
-          style={{ tintColor: this.state.tintColor }}
-        />
-        <Text
-          style={{
+        <View>
+          <Pano
+            source={asset('outdoors.jpg')}
+            style={{ tintColor: this.state.tintColor }}
+          />
+          <Text
+            style={{
             backgroundColor: 'yellow',
             fontSize: 0.7,
             color: this.state.textColor,
@@ -36,16 +42,21 @@ export default class Home extends Component {
             textAlignVertical: 'center',
             transform: [{translate: [0, 0, -3]}],
           }}
-          onEnter={() => {
+            onEnter={() => {
             this.setState({ textColor: 'red', tintColor: 'yellow' });
             data && data.refetch();
           }}
-          onExit={() => this.setState({ textColor: 'white', tintColor: 'green' })}>
-        >
-          React Europe
-        </Text>
-
-        <ScheduleData data={this.props.data} />
+            onExit={() => this.setState({ textColor: 'white', tintColor: 'white' })}>
+            >
+              React Europe
+          </Text>
+          <ScheduleData data={this.props.data} />
+        </View>
+        <View>
+          <Rain
+            start={this.state.speed}
+          />
+        </View>
       </View>
     );
   }
