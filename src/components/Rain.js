@@ -6,7 +6,7 @@ import {
 } from 'react-vr';
 
 export default class Rain extends Component {
-  numberDrops = 300;
+  numberDrops = 400;
   xDisplacements = [];
   zDisplacements = [];
 
@@ -22,6 +22,14 @@ export default class Rain extends Component {
       this.xDisplacements.push(this.getRandom(-20, 20));
       this.zDisplacements.push(this.getRandom(-20, 20));
       this.state.yDisplacements.push(this.getRandom(6, 20));
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.start !== this.props.start && nextProps.start) {
+      setTimeout(() => Animated.timing(this.state.dropAnimation, { toValue: 1, duration: 8000 }).start(
+        event => Animated.timing(this.state.disappearAnimation, { toValue: 1, duration: 1000 }).start()
+      ), 8000);
     }
   }
 
@@ -64,12 +72,6 @@ export default class Rain extends Component {
     }
     return rain;
   };
-
-  componentDidMount() {
-    Animated.timing(this.state.dropAnimation, { toValue: 1, duration: 6000 }).start(
-      event => Animated.timing(this.state.disappearAnimation, { toValue: 1, duration: 1000 }).start()
-    );
-  }
 
   render() {
     return (
