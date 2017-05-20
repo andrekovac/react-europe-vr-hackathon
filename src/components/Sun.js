@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-vr';
+import { Text, View, Sphere } from 'react-vr';
 import { graphql, gql } from 'react-apollo';
 
 import { ActivityIndicator } from 'react-native';
 
-class ScheduleData extends Component {
+class Sun extends Component {
   state = {
     text: 'No data yet',
   };
@@ -22,10 +22,17 @@ class ScheduleData extends Component {
   render() {
     const { data: { events } } = this.props;
 
-    console.log({ events });
-
     return (
       <View>
+        <Sphere
+          radius={2}
+          widthSegments={12}
+          heightSegments={12}
+          style={{
+          color: 'yellow',
+          transform: [{translate: [0, 10, -20]}],
+        }}
+        />
         <Text
           style={{
             backgroundColor: 'white',
@@ -75,4 +82,4 @@ export default graphql(SCHEDULE_QUERY, {
   // props: ({ data: { events, networkStatus, error } }) => ({
   //   events, networkStatus, error
   // }),
-})(ScheduleData);
+})(Sun);

@@ -4,10 +4,13 @@ import {
   Pano,
   Text,
   View,
+  PointLight,
+  SpotLight,
+  AmbientLight,
 } from 'react-vr';
 
-import ScheduleData from './ScheduleData';
 import Rain from './Rain';
+import Sun from './Sun';
 
 export default class Home extends Component {
   state = {
@@ -15,22 +18,25 @@ export default class Home extends Component {
     tintColor: 'purple',
   };
 
-  componentDidMount() {
+  renderPano = () => (
+    <Pano
+      source={asset('outdoors.jpg')}
+      style={{ tintColor: this.state.tintColor }}
+    />
+  );
 
-  };
+  renderLight = () => (
+    <AmbientLight intensity={0} />
+// <PointLight intensity={20} distance={40} style={{ color: 'red' }} />
+  );
 
-  render() {
+  renderMenu = () => {
     const { data } = this.props;
 
     return (
       <View>
-        <View>
-          <Pano
-            source={asset('outdoors.jpg')}
-            style={{ tintColor: this.state.tintColor }}
-          />
-          <Text
-            style={{
+        <Text
+          style={{
             backgroundColor: 'yellow',
             fontSize: 0.7,
             color: this.state.textColor,
@@ -42,21 +48,25 @@ export default class Home extends Component {
             textAlignVertical: 'center',
             transform: [{translate: [0, 0, -3]}],
           }}
-            onEnter={() => {
+          onEnter={() => {
             this.setState({ textColor: 'red', tintColor: 'yellow' });
             data && data.refetch();
           }}
-            onExit={() => this.setState({ textColor: 'white', tintColor: 'white' })}>
-            >
-              React Europe
-          </Text>
-          <ScheduleData data={this.props.data} />
-        </View>
-        <View>
-          <Rain
-            start={this.state.speed}
-          />
-        </View>
+          onExit={() => this.setState({ textColor: 'white', tintColor: 'white' })}>
+          >
+            React Europe
+        </Text>
+      </View>
+    );
+  };
+
+  render() {
+    return (
+      <View>
+        {this.renderPano()}
+        {this.renderMenu()}
+        <Rain start={this.state.speed} />
+        <Sun data={this.props.data} />
       </View>
     );
   }

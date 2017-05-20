@@ -6,20 +6,21 @@ import {
 } from 'react-vr';
 
 export default class Rain extends Component {
-  numberDrops = 200;
+  numberDrops = 300;
   xDisplacements = [];
   zDisplacements = [];
 
   state = {
     yDisplacements: [],
     dropAnimation: new Animated.Value(0),
+    disappearAnimation: new Animated.Value(0),
   };
 
   constructor(props, context) {
     super(props, context);
     for (let i = 0; i < this.numberDrops; i++) {
-      this.xDisplacements.push(this.getRandom(-10, 10));
-      this.zDisplacements.push(this.getRandom(-10, 10));
+      this.xDisplacements.push(this.getRandom(-20, 20));
+      this.zDisplacements.push(this.getRandom(-20, 20));
       this.state.yDisplacements.push(this.getRandom(6, 20));
     }
   }
@@ -38,12 +39,16 @@ export default class Rain extends Component {
             outputRange: [y, 0]
           }),
         }],
+        opacity: this.state.disappearAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 0]
+        }),
       }}
     >
       <Sphere
         radius={0.1}
-        widthSegments={20}
-        heightSegments={12}
+        widthSegments={6}
+        heightSegments={6}
         style={{
           color: 'blue',
           transform: [{translate: [x, 0, z]}],
@@ -61,7 +66,9 @@ export default class Rain extends Component {
   };
 
   componentDidMount() {
-    Animated.timing(this.state.dropAnimation, { toValue: 1, duration: 6000 }).start();
+    Animated.timing(this.state.dropAnimation, { toValue: 1, duration: 6000 }).start(
+      event => Animated.timing(this.state.disappearAnimation, { toValue: 1, duration: 1000 }).start()
+    );
   }
 
   render() {
@@ -72,6 +79,3 @@ export default class Rain extends Component {
     );
   }
 };
-
-//         transform: [{translate: [x, y, z]}],
-
