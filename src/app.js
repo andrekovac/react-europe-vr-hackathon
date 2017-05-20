@@ -1,44 +1,25 @@
 import React from 'react';
-import {
-  AppRegistry,
-  asset,
-  Pano,
-  Text,
-  View,
-} from 'react-vr';
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient, { createNetworkInterface } from 'apollo-client'
+
+import Query from './components/Query';
 
 export default class ReactEuropeHackathon extends React.Component {
-  state = {
-    textColor: 'blue',
-    tintColor: 'purple',
-  };
+  createClient() {
+    // Initialize Apollo Client with URL to our server
+    return new ApolloClient({
+      networkInterface: createNetworkInterface({
+        uri: 'http://api.githunt.com/graphql',
+      }),
+    });
+  }
 
   render() {
     return (
-      <View>
-        <Pano
-          source={asset('chess-world.jpg')}
-          style={{ tintColor: this.state.tintColor }}
-        />
-        <Text
-          style={{
-            backgroundColor: 'yellow',
-            fontSize: 0.7,
-            color: this.state.textColor,
-            fontWeight: '400',
-            layoutOrigin: [0.5, 0.5],
-            paddingLeft: 0.2,
-            paddingRight: 0.2,
-            textAlign: 'center',
-            textAlignVertical: 'center',
-            transform: [{translate: [0, 0, -3]}],
-          }}
-          onEnter={() => this.setState({ textColor: 'red', tintColor: 'purple' })}
-          onExit={() => this.setState({ textColor: 'white', tintColor: 'green' })}>
-        >
-          React Europe
-        </Text>
-      </View>
+      // Feed the client instance into your React component tree
+      <ApolloProvider client={this.createClient()}>
+        <Query />
+      </ApolloProvider>
     );
   }
 };
